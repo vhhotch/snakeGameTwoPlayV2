@@ -23,14 +23,13 @@ class Snake {
 
 class Food {
   constructor(){
-    this.FOOD_COLOUR = "red";
+    this.colours = ["red", "yellow", "blue", "green", "orange", "purple", "pink", "brown"]
+    this.FOOD_COLOUR = this.colours[0];
     this.FOOD_BORDER_COLOUR = "darkred";
     this.x = null;
     this.y = null;
   }
 }
-
-
 
 const GAME_SPEED = 100;
     const CANVAS_BORDER_COLOUR = 'black';
@@ -98,8 +97,8 @@ const GAME_SPEED = 100;
      * Draw the food on the canvas
      */
     function drawFood() {
-      ctx.fillStyle = food.FOOD_COLOUR
-      ctx.strokestyle = food.FOOD_BORDER_COLOUR
+      ctx.fillStyle = food.FOOD_COLOUR;
+      ctx.strokestyle = food.FOOD_BORDER_COLOUR;
       ctx.fillRect(food.x, food.y, 10, 10);
       ctx.strokeRect(food.x, food.y, 10, 10);
     }
@@ -159,10 +158,12 @@ const GAME_SPEED = 100;
      * Creates random set of coordinates for the snake food.
      */
     function createFood() {
+      food.FOOD_COLOUR = food.colours[Math.floor(Math.random()*7)]
       // Generate a random number the food x-coordinate
       food.x = randomTen(0, gameCanvas.width - 10);
       // Generate a random number for the food y-coordinate
       food.y = randomTen(0, gameCanvas.height - 10);
+  
 
       // if the new food location is where the snake currently is, generate a new food location
       snakeOne.snake.forEach(function isFoodOnSnake(part) {
