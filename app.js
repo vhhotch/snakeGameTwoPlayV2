@@ -182,8 +182,8 @@ const GAME_SPEED = 100;
 
       const snakeOneAte = snakeOne.didEatFoodCheck(foodx, foody, foodColour);
       const snakeTwoAte = snakeTwo.didEatFoodCheck(foodx, foody, foodColour);
-      document.getElementById('snakeOneScore').innerHTML = snakeOne.score;
-      document.getElementById('snakeTwoScore').innerHTML = snakeTwo.score;
+      document.getElementById('snakeOneScore').textContent = snakeOne.score;
+      document.getElementById('snakeTwoScore').textContent = snakeTwo.score;
 
       if (snakeOneAte || snakeTwoAte) {
         createFood()
