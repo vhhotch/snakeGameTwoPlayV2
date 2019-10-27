@@ -116,6 +116,7 @@ const GAME_SPEED = 100;
       if (didEatFood) {
         // Increase score
         snakeOne.score += 10;
+        snakeOne.SNAKE_COLOUR = food.FOOD_COLOUR;
         // Display score on screen
         document.getElementById('score').innerHTML = snakeOne.score;
 
