@@ -1,8 +1,8 @@
 class Snake {
     constructor (player){
         this.player = player;
-        this.SNAKE_COLOUR = 'lightgreen';
-        this.SNAKE_BORDER_COLOUR = 'darkgreen';
+        this.SNAKE_COLOUR = "lightgreen";
+        this.SNAKE_BORDER_COLOUR = "darkgreen";
         this.score = 0;
         this.changingDirection = false;
         this.snake =  [
@@ -21,22 +21,26 @@ class Snake {
     }
 }
 
+class Food {
+  constructor(){
+    this.FOOD_COLOUR = "red";
+    this.FOOD_BORDER_COLOUR = "darkred";
+    this.x = null;
+    this.y = null;
+  }
+}
+
 
 
 const GAME_SPEED = 100;
     const CANVAS_BORDER_COLOUR = 'black';
     const CANVAS_BACKGROUND_COLOUR = "white";
-    const FOOD_COLOUR = 'red';
-    const FOOD_BORDER_COLOUR = 'darkred';
 
-    // Food x-coordinate
-    let foodX;
-    // Food y-coordinate
-    let foodY;
     // Horizontal velocity
     let dx = 10;
     // Vertical velocity
     let dy = 0;
+    const food = new Food ();
 
     // Get the canvas element
     const gameCanvas = document.getElementById("gameCanvas");
@@ -94,10 +98,10 @@ const GAME_SPEED = 100;
      * Draw the food on the canvas
      */
     function drawFood() {
-      ctx.fillStyle = FOOD_COLOUR;
-      ctx.strokestyle = FOOD_BORDER_COLOUR;
-      ctx.fillRect(foodX, foodY, 10, 10);
-      ctx.strokeRect(foodX, foodY, 10, 10);
+      ctx.fillStyle = food.FOOD_COLOUR
+      ctx.strokestyle = food.FOOD_BORDER_COLOUR
+      ctx.fillRect(food.x, food.y, 10, 10);
+      ctx.strokeRect(food.x, food.y, 10, 10);
     }
 
     /**
@@ -109,7 +113,7 @@ const GAME_SPEED = 100;
 
       snakeOne.move (dx, dy);
 
-      const didEatFood = snakeOne.snake[0].x === foodX && snakeOne.snake[0].y === foodY;
+      const didEatFood = snakeOne.snake[0].x === food.x && snakeOne.snake[0].y === food.y;
       if (didEatFood) {
         // Increase score
         snakeOne.score += 10;
@@ -156,13 +160,13 @@ const GAME_SPEED = 100;
      */
     function createFood() {
       // Generate a random number the food x-coordinate
-      foodX = randomTen(0, gameCanvas.width - 10);
+      food.x = randomTen(0, gameCanvas.width - 10);
       // Generate a random number for the food y-coordinate
-      foodY = randomTen(0, gameCanvas.height - 10);
+      food.y = randomTen(0, gameCanvas.height - 10);
 
       // if the new food location is where the snake currently is, generate a new food location
       snakeOne.snake.forEach(function isFoodOnSnake(part) {
-        const foodIsoNsnake = part.x == foodX && part.y == foodY;
+        const foodIsoNsnake = part.x == food.x && part.y == food.y;
         if (foodIsoNsnake) createFood();
       });
     }
