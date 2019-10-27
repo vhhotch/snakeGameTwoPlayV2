@@ -190,16 +190,19 @@ const GAME_SPEED = 100;
       }
     }
 
-    /**
-     * Returns true if the head of the snake touched another part of the game
-     * or any of the walls
-     */
     function didGameEnd() {
       
       if (snakeOne.gameEndCheck() || snakeTwo.gameEndCheck()){
         return true
       }
-    }
+
+      for (let i = 0; i < snakeOne.snake.length; i++) {
+        for (let s = 0; s < snakeTwo.snake.length; s++){
+          if (snakeOne.snake[i].x === snakeTwo.snake[s].x && snakeOne.snake[i].y === snakeTwo.snake[s].y) 
+            return true
+          }
+        }
+      }
 
     /**
      * Generates a random number that is a multiple of 10 given a minumum
