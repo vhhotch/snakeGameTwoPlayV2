@@ -1,17 +1,17 @@
 class Snake {
-    constructor (player){
+    constructor (player, snake){
         this.player = player;
         this.SNAKE_COLOUR = "lightgreen";
         this.SNAKE_BORDER_COLOUR = "darkgreen";
         this.score = 0;
         this.changingDirection = false;
-        this.snake =  [
-            {x: 150, y: 150},
-            {x: 140, y: 150},
-            {x: 130, y: 150},
-            {x: 120, y: 150},
-            {x: 110, y: 150}
-          ]
+        this.snake =  snake;
+        this.dy = 0;
+        this.dx = 10;
+        this.LEFT_KEY = 37;
+        this.RIGHT_KEY = 39;
+        this.UP_KEY = 38;
+        this.DOWN_KEY = 40;
     }
     move (dx, dy) {
           // Create the new Snake's head
@@ -19,7 +19,39 @@ class Snake {
           // Add the new head to the beginning of snake body
           this.snake.unshift(head);
     }
-}
+    changeDirection (keyPressed) {
+        /**
+         * Prevent the snake from reversing
+         * Example scenario:
+         * Snake is moving to the right. User presses down and immediately left
+         * and the snake immediately changes direction without taking a step down first
+         */
+        if (this.changingDirection) return;
+        this.changingDirection = true;
+  
+        const goingUp = this.dy === -10;
+        const goingDown = this.dy === 10;
+        const goingRight = this.dx === 10;
+        const goingLeft = this.dx === -10;
+  
+        if (keyPressed === this.LEFT_KEY && !goingRight) {
+          this.dx = -10;
+          this.dy = 0;
+        }
+        if (keyPressed === this.UP_KEY && !goingDown) {
+          this.dx = 0;
+          this.dy = -10;
+        }
+        if (keyPressed === this.RIGHT_KEY && !goingLeft) {
+          this.dx = 10;
+          this.dy = 0;
+        }
+        if (keyPressed === this.DOWN_KEY && !goingUp) {
+          this.dx = 0;
+          this.dy = 10;
+        }
+      }
+    }
 
 class Food {
   constructor(){
@@ -35,10 +67,6 @@ const GAME_SPEED = 100;
     const CANVAS_BORDER_COLOUR = 'black';
     const CANVAS_BACKGROUND_COLOUR = "white";
 
-    // Horizontal velocity
-    let dx = 10;
-    // Vertical velocity
-    let dy = 0;
     const food = new Food ();
 
     // Get the canvas element
@@ -47,7 +75,18 @@ const GAME_SPEED = 100;
     const ctx = gameCanvas.getContext("2d");
 
 
-    const snakeOne = new Snake ("Player One")
+    const snakeOne = new Snake ("Player One",  [
+    {x: 170, y: 170},
+    {x: 160, y: 170},
+    {x: 150, y: 170},
+    {x: 140, y: 170},
+    {x: 130, y: 170}])
+    const snakeTwo = new Snake ("Player Two", [
+    {x: 150, y: 150},
+    {x: 140, y: 150},
+    {x: 130, y: 150},
+    {x: 120, y: 150},
+    {x: 110, y: 150}])
 
     // Start game
     main();
@@ -67,6 +106,7 @@ const GAME_SPEED = 100;
 
       setTimeout(function onTick() {
         snakeOne.changingDirection = false;
+        snakeTwo.changeDirection = false;
         clearCanvas();
         drawFood();
         advanceSnake();
@@ -110,7 +150,8 @@ const GAME_SPEED = 100;
      */
     function advanceSnake() {
 
-      snakeOne.move (dx, dy);
+      snakeOne.move (snakeOne.dx, snakeOne.dy);
+      snakeTwo.move (snakeTwo.dx, snakeTwo.dy)
 
       const didEatFood = snakeOne.snake[0].x === food.x && snakeOne.snake[0].y === food.y;
       if (didEatFood) {
@@ -118,7 +159,7 @@ const GAME_SPEED = 100;
         snakeOne.score += 10;
         snakeOne.SNAKE_COLOUR = food.FOOD_COLOUR;
         // Display score on screen
-        document.getElementById('score').innerHTML = snakeOne.score;
+        document.getElementById('snakeOneScore').innerHTML = snakeOne.score;
 
         // Generate new food location
         createFood();
@@ -200,49 +241,8 @@ const GAME_SPEED = 100;
       ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
     }
 
-    /**
-     * Changes the vertical and horizontal velocity of the snake according to the
-     * key that was pressed.
-     * The direction cannot be switched to the opposite direction, to prevent the snake
-     * from reversing
-     * For example if the the direction is 'right' it cannot become 'left'
-     * @param { object } event - The keydown event
-     */
     function changeDirection(event) {
-      const LEFT_KEY = 37;
-      const RIGHT_KEY = 39;
-      const UP_KEY = 38;
-      const DOWN_KEY = 40;
-      /**
-       * Prevent the snake from reversing
-       * Example scenario:
-       * Snake is moving to the right. User presses down and immediately left
-       * and the snake immediately changes direction without taking a step down first
-       */
-      if (snakeOne.changingDirection) return;
-      snakeOne.changingDirection = true;
-
+     
       const keyPressed = event.keyCode;
-
-      const goingUp = dy === -10;
-      const goingDown = dy === 10;
-      const goingRight = dx === 10;
-      const goingLeft = dx === -10;
-
-      if (keyPressed === LEFT_KEY && !goingRight) {
-        dx = -10;
-        dy = 0;
-      }
-      if (keyPressed === UP_KEY && !goingDown) {
-        dx = 0;
-        dy = -10;
-      }
-      if (keyPressed === RIGHT_KEY && !goingLeft) {
-        dx = 10;
-        dy = 0;
-      }
-      if (keyPressed === DOWN_KEY && !goingUp) {
-        dx = 0;
-        dy = 10;
-      }
+      snakeOne.changeDirection (keyPressed);
     }
