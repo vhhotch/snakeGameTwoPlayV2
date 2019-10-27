@@ -1,5 +1,5 @@
 class Snake {
-    constructor (player, snake){
+    constructor (player, snake, directionKeys){
         this.player = player;
         this.SNAKE_COLOUR = "lightgreen";
         this.SNAKE_BORDER_COLOUR = "darkgreen";
@@ -8,10 +8,11 @@ class Snake {
         this.snake =  snake;
         this.dy = 0;
         this.dx = 10;
-        this.LEFT_KEY = 37;
-        this.RIGHT_KEY = 39;
-        this.UP_KEY = 38;
-        this.DOWN_KEY = 40;
+        this.directionKeys = directionKeys;
+        this.LEFT_KEY = this.directionKeys[0];
+        this.RIGHT_KEY = this.directionKeys[1];
+        this.UP_KEY = this.directionKeys [2];
+        this.DOWN_KEY = this.directionKeys [3];
     }
     move (dx, dy) {
           // Create the new Snake's head
@@ -80,13 +81,15 @@ const GAME_SPEED = 100;
     {x: 160, y: 170},
     {x: 150, y: 170},
     {x: 140, y: 170},
-    {x: 130, y: 170}])
+    {x: 130, y: 170}], 
+    [37, 39, 38, 40])
     const snakeTwo = new Snake ("Player Two", [
     {x: 150, y: 150},
     {x: 140, y: 150},
     {x: 130, y: 150},
     {x: 120, y: 150},
-    {x: 110, y: 150}])
+    {x: 110, y: 150}],
+    [37, 39, 38, 40])
 
     // Start game
     main();
