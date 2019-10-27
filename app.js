@@ -35,6 +35,20 @@ class Snake {
 
       return didchange;
     }
+
+    gameEndCheck () {
+      for (let i = 4; i < this.snake.length; i++) {
+        if (this.snake[i].x === this.snake[0].x && this.snake[i].y === this.snake[0].y) return true
+      }
+
+      const hitLeftWall = this.snake[0].x < 0;
+      const hitRightWall = this.snake[0].x > gameCanvas.width - 10;
+      const hitToptWall = this.snake[0].y < 0;
+      const hitBottomWall = this.snake[0].y > gameCanvas.height - 10;
+
+      return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
+    }
+
     changeDirection (keyPressed) {
         /**
          * Prevent the snake from reversing
@@ -161,11 +175,6 @@ const GAME_SPEED = 100;
       ctx.strokeRect(food.x, food.y, 10, 10);
     }
 
-    /**
-     * Advances the snake by changing the x-coordinates of its parts
-     * according to the horizontal velocity and the y-coordinates of its parts
-     * according to the vertical veolocity
-     */
     function advanceSnake(foodx, foody, foodColour) {
 
       snakeOne.move (snakeOne.dx, snakeOne.dy);
@@ -186,16 +195,10 @@ const GAME_SPEED = 100;
      * or any of the walls
      */
     function didGameEnd() {
-      for (let i = 4; i < snakeOne.snake.length; i++) {
-        if (snakeOne.snake[i].x === snakeOne.snake[0].x && snakeOne.snake[i].y === snakeOne.snake[0].y) return true
+      
+      if (snakeOne.gameEndCheck() || snakeTwo.gameEndCheck()){
+        return true
       }
-
-      const hitLeftWall = snakeOne.snake[0].x < 0;
-      const hitRightWall = snakeOne.snake[0].x > gameCanvas.width - 10;
-      const hitToptWall = snakeOne.snake[0].y < 0;
-      const hitBottomWall = snakeOne.snake[0].y > gameCanvas.height - 10;
-
-      return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
     }
 
     /**
@@ -232,6 +235,7 @@ const GAME_SPEED = 100;
     function drawSnake() {
       // loop through the snake parts drawing each part on the canvas
       snakeOne.snake.forEach(drawSnakePart)
+      snakeTwo.snake.forEach(drawSnakePart)
     }
 
     /**
