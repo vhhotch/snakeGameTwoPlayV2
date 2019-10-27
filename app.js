@@ -5,7 +5,7 @@ class Snake {
         this.SNAKE_BORDER_COLOUR = "darkgreen";
         this.score = 0;
         this.changingDirection = false;
-        this.snake =  snake;
+        this.snake = snake;
         this.dy = 0;
         this.dx = 10;
         this.directionKeys = directionKeys;
@@ -19,6 +19,21 @@ class Snake {
           const head = {x: this.snake[0].x + dx, y: this.snake[0].y + dy};
           // Add the new head to the beginning of snake body
           this.snake.unshift(head);
+    }
+    didEatFoodCheck (foodx, foody, foodColour) {
+      let didchange = false 
+      const didEatFood = this.snake[0].x === foodx && this.snake[0].y === foody;
+      if (didEatFood) {
+        // Increase score
+        this.score += 10;
+        this.SNAKE_COLOUR = foodColour;
+        didchange = true;
+      } else {
+        // Remove the last part of snake body
+        this.snake.pop();
+      }
+
+      return didchange;
     }
     changeDirection (keyPressed) {
         /**
@@ -65,7 +80,7 @@ class Food {
 }
 
 const GAME_SPEED = 100;
-    const CANVAS_BORDER_COLOUR = 'black';
+    const CANVAS_BORDER_COLOUR = "black";
     const CANVAS_BACKGROUND_COLOUR = "white";
 
     const food = new Food ();
@@ -76,7 +91,7 @@ const GAME_SPEED = 100;
     const ctx = gameCanvas.getContext("2d");
 
 
-    const snakeOne = new Snake ("Player One",  [
+    const snakeOne = new Snake ("Player One", [
     {x: 170, y: 170},
     {x: 160, y: 170},
     {x: 150, y: 170},
@@ -89,7 +104,7 @@ const GAME_SPEED = 100;
     {x: 130, y: 150},
     {x: 120, y: 150},
     {x: 110, y: 150}],
-    [37, 39, 38, 40])
+    [65, 68, 87, 83])
 
     // Start game
     main();
@@ -109,10 +124,10 @@ const GAME_SPEED = 100;
 
       setTimeout(function onTick() {
         snakeOne.changingDirection = false;
-        snakeTwo.changeDirection = false;
+        snakeTwo.changingDirection = false;
         clearCanvas();
         drawFood();
-        advanceSnake();
+        advanceSnake(food.x, food.y, food.FOOD_COLOUR);
         drawSnake();
 
         // Call game again
@@ -151,24 +166,18 @@ const GAME_SPEED = 100;
      * according to the horizontal velocity and the y-coordinates of its parts
      * according to the vertical veolocity
      */
-    function advanceSnake() {
+    function advanceSnake(foodx, foody, foodColour) {
 
       snakeOne.move (snakeOne.dx, snakeOne.dy);
       snakeTwo.move (snakeTwo.dx, snakeTwo.dy)
 
-      const didEatFood = snakeOne.snake[0].x === food.x && snakeOne.snake[0].y === food.y;
-      if (didEatFood) {
-        // Increase score
-        snakeOne.score += 10;
-        snakeOne.SNAKE_COLOUR = food.FOOD_COLOUR;
-        // Display score on screen
-        document.getElementById('snakeOneScore').innerHTML = snakeOne.score;
+      const snakeOneAte = snakeOne.didEatFoodCheck(foodx, foody, foodColour);
+      const snakeTwoAte = snakeTwo.didEatFoodCheck(foodx, foody, foodColour);
+      document.getElementById('snakeOneScore').innerHTML = snakeOne.score;
+      document.getElementById('snakeTwoScore').innerHTML = snakeTwo.score;
 
-        // Generate new food location
-        createFood();
-      } else {
-        // Remove the last part of snake body
-        snakeOne.snake.pop();
+      if (snakeOneAte || snakeTwoAte) {
+        createFood()
       }
     }
 
@@ -245,7 +254,7 @@ const GAME_SPEED = 100;
     }
 
     function changeDirection(event) {
-     
       const keyPressed = event.keyCode;
       snakeOne.changeDirection (keyPressed);
+      snakeTwo.changeDirection (keyPressed);
     }
