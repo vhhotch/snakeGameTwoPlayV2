@@ -1,7 +1,7 @@
 class Snake {
-    constructor (player, snake, directionKeys){
+    constructor (player, colour, snake, directionKeys){
         this.player = player;
-        this.SNAKE_COLOUR = "lightgreen";
+        this.SNAKE_COLOUR = colour;
         this.SNAKE_BORDER_COLOUR = "darkgreen";
         this.score = 0;
         this.changingDirection = false;
@@ -105,20 +105,20 @@ const GAME_SPEED = 100;
     const ctx = gameCanvas.getContext("2d");
 
 
-    const snakeOne = new Snake ("Player One", [
-    {x: 170, y: 170},
-    {x: 160, y: 170},
-    {x: 150, y: 170},
-    {x: 140, y: 170},
-    {x: 130, y: 170}], 
-    [37, 39, 38, 40])
-    const snakeTwo = new Snake ("Player Two", [
-    {x: 150, y: 150},
-    {x: 140, y: 150},
-    {x: 130, y: 150},
-    {x: 120, y: 150},
-    {x: 110, y: 150}],
-    [65, 68, 87, 83])
+    const snakeOne = new Snake ("Player One", "rgb(28, 107, 28)", [
+      {x: 150, y: 150},
+      {x: 140, y: 150},
+      {x: 130, y: 150},
+      {x: 120, y: 150},
+      {x: 110, y: 150}], 
+      [37, 39, 38, 40])
+    const snakeTwo = new Snake ("Player Two", "rgb(121, 44, 44)", [
+      {x: 170, y: 170},
+      {x: 160, y: 170},
+      {x: 150, y: 170},
+      {x: 140, y: 170},
+      {x: 130, y: 170}],
+      [65, 68, 87, 83])
 
     // Start game
     main();
@@ -237,20 +237,37 @@ const GAME_SPEED = 100;
      */
     function drawSnake() {
       // loop through the snake parts drawing each part on the canvas
-      snakeOne.snake.forEach(drawSnakePart)
-      snakeTwo.snake.forEach(drawSnakePart)
+      snakeOne.snake.forEach(drawSnakeOnePart)
+      snakeTwo.snake.forEach(drawSnakeTwoPart)
     }
 
     /**
      * Draws a part of the snake on the canvas
      * @param { object } snakePart - The coordinates where the part should be drawn
      */
-    function drawSnakePart(snakePart) {
+    function drawSnakeOnePart(snakePart) {
+      
       // Set the colour of the snake part
       ctx.fillStyle = snakeOne.SNAKE_COLOUR;
 
       // Set the border colour of the snake part
       ctx.strokestyle = snakeOne.SNAKE_BORDER_COLOUR;
+
+      // Draw a "filled" rectangle to represent the snake part at the coordinates
+      // the part is located
+      ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
+
+      // Draw a border around the snake part
+      ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+    }
+
+    function drawSnakeTwoPart(snakePart) {
+      
+      // Set the colour of the snake part
+      ctx.fillStyle = snakeTwo.SNAKE_COLOUR;
+
+      // Set the border colour of the snake part
+      ctx.strokestyle = snakeTwo.SNAKE_BORDER_COLOUR;
 
       // Draw a "filled" rectangle to represent the snake part at the coordinates
       // the part is located
