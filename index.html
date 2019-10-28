@@ -3,12 +3,19 @@
   <head>
   	<title>Snake Game</title>
     <link href="https://fonts.googleapis.com/css?family=Antic+Slab" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div>Player One: <span id="snakeOneScore">0</span></div>
-    <div>Player Two: <span id="snakeTwoScore">0</span></div>
-    <canvas id="gameCanvas" width="300" height="300"></canvas>
+    <h1>Welcome to Snake!</h1>
+    <div class= "game">
+      <div id="playerOneLine">Player One: <span id="snakeOneScore">0</span></div>
+      <div class=middle>
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+        <button class= "startGame">Start Game</button>
+      </div>
+      <div id="playerTwoLine">Player Two: <span id="snakeTwoScore">0</span></div>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>
